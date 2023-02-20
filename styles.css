@@ -1,0 +1,116 @@
+h3 {
+  font-family: 'Comfortaa';
+}
+
+#bannername {
+  font-weight: normal !important;
+  padding-left: 20px;
+}
+
+body {
+  background-color: #ecedef;
+  font-family: 'Comfortaa';
+}
+
+#navbar {
+  background-color: #fcfcfd;
+  position: fixed;
+  top: -2px;
+  left: -1px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+#user-controls {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  margin-right: 30px;
+}
+
+#username {}
+
+#sign-out {}
+
+#rec {
+  position: fixed;
+  top: 90px;
+  left: 70vw;
+  width: 100vw;
+}
+
+#user-banner {
+  display: flex;
+  flex-direction: row;
+}
+
+#avi {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+#suggies {}
+
+#suggie {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+#stories {
+  background-color: #fdfafc;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+  box-shadow: -1px -1px 3px 3px lightgray;
+  padding-top: 10px;
+}
+
+#story {
+  padding: 10px;
+  font-size: 12px;
+}
+
+#feed {
+  width: 62vw;
+}
+
+.card {
+  background-color: #fcfcfd;
+  box-shadow: -1px -1px 3px 3px lightgray;
+  margin-bottom: 40px;
+}
+
+.card h4 {
+  color: #464646;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.card img {
+  box-shadow: 1px 1px 1px 1px lightgray;
+}
+
+.linkbutton {
+  color: rgb(14, 122, 254);
+  text-decoration: none;
+  font-weight: normal !important;
+}
+
+.nostylelink {
+  text-decoration: none;
+  font-weight: normal !important;
+  color: rgb(114, 114, 114);
+}
+
+@media only screen and (max-width: 800px) {
+  #rec {
+    display: none;
+  }
+
+  #feed {
+    width: 87vw;
+  }
+}
