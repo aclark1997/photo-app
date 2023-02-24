@@ -2,8 +2,17 @@ import {getAccessToken} from './utilities.js';
 const rootURL = 'https://photo-app-secured.herokuapp.com';
 
 
-document.addEventListener("click", (ev) => {
-    console.log("!");
+window.addEventListener("click", (ev) => {
+    console.log(ev.target);
+    if(ev.target.innerHTML.includes('Show') && ev.target.className === 'linkbutton'){
+        document.querySelector("#commentsmodal").style = 'display: show';
+        document.querySelector("#modalbackdrop").style = 'display: show';
+    }
+
+    if(ev.target.id === 'closemodal'){
+        document.querySelector("#commentsmodal").style = 'display: none';
+        document.querySelector("#modalbackdrop").style = 'display: none';
+    }
 });
 
 const showStories = async (token) => {
@@ -104,7 +113,7 @@ const showPosts = async (token) => {
           <p><b>${post.user.username}</b> ${post.caption}</p>
         </div>
 
-        <a style="margin-left: 15px" class="linkbutton" onclick="viewComments(${post.id})">Show ${post.comments.length} comments</a>
+        <a data-postid=${post.id} style="margin-left: 15px" class="linkbutton">Show ${post.comments.length} comments</a>
         <br />
         <p style="margin-left: 15px"><b>${post.comments[0] != undefined ? post.comments[0].user.username : ""}</b> ${post.comments[0] != undefined ? post.comments[0].text : ""}</p>
         <p style="margin-left: 15px; margin-top: -10px; font-size: 10px; color: darkgray;">${post.comments[0] != undefined ? post.comments[0].display_time.toUpperCase() : ""}</p>
