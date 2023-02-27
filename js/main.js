@@ -1,11 +1,13 @@
-import {getAccessToken} from './utilities.js';
+import {
+    getAccessToken
+} from './utilities.js';
 const rootURL = 'https://photo-app-secured.herokuapp.com';
 
 let token = undefined;
 
 window.addEventListener("click", async (ev) => {
     console.log(ev.target);
-    if(ev.target.innerHTML.includes('Show') && ev.target.className === 'linkbutton'){
+    if (ev.target.innerHTML.includes('Show') && ev.target.className === 'linkbutton') {
         document.querySelector("#commentsmodal").style = 'display: show';
         document.querySelector("#modalbackdrop").style = 'display: show';
 
@@ -18,20 +20,62 @@ window.addEventListener("click", async (ev) => {
         })
         const data = await response.json();
         let targetPost = null;
-        data.forEach((post)=> {
-            if(post.id == Number(ev.target.getAttribute("data-postid"))){
+        data.forEach((post) => {
+            if (post.id == Number(ev.target.getAttribute("data-postid"))) {
                 targetPost = post;
-                document.querySelector("#commentsmodal").innerHTML += `<img style='width: 70%; height: 100%;' src='${post.image_url}' />`;
-                document.querySelector("#commentsmodal").innerHTML += `<p style='position: absolute; left: 71%; top: 1%;'>${post.user.username}</p>`;
+                document.querySelector("#commentsmodal").innerHTML = `<img style='width: 70%; height: 100%;' src='${post.image_url}' />`;
+                document.querySelector("#commentsmodal").innerHTML += `<div style='display: flex; flex-direction: row; position: absolute; left: 71%; top: 1%;'>
+                <img style='margin-left: -10px; margin-top: 15px; margin-right: 10px; border-radius: 50%; width: 40px; height: 40px;' src='${post.user.image_url}' />
+                <p style='font-size: 24px;'><b>${post.user.username}</b></p>
+                </div>
+                `;
+
+                document.querySelector("#commentsmodal").innerHTML += `
+                <div style='position: absolute; left: 71%; top: 12%; overflow-y: scroll; height: 88%;' id='modalcontent'>
+
+                </div>
+                `;
+
+                document.querySelector("#modalcontent").innerHTML = `
+                <div>
+                    <img style='border-radius: 50%; width: 40px; height: 40px;' src='${post.user.image_url}' /> 
+                <p style='margin-top: -25px; margin-left: 45px;'><b>${post.user.username}</b> <a class="nostylelink" href=""><i style="padding: 10px; font-size: 24px;" class="fa-regular fa-heart"></i></a></p>
+                <div style='overflow-wrap: break-word;'>
+                    ${post.caption}
+                </div>
+                <p>${post.display_time}</p>
+                <br />
+                
+                </div>
+                `;
+
+                post.comments.forEach((comment) => {
+                    document.querySelector("#modalcontent").innerHTML += `
+                    <img style='border-radius: 50%; width: 40px; height: 40px;' src='${comment.user.image_url}' /> 
+                    <p style='margin-top: -25px; margin-left: 45px;'><b>${comment.user.username}</b> <a class="nostylelink" href=""><i style="padding: 10px; font-size: 24px;" class="fa-regular fa-heart"></i></a></p>
+                    <div style='overflow-wrap: break-word;'>
+                        ${comment.text}
+                    </div>
+                    <p>${comment.display_time}</p>
+                    <br />
+                    `;
+                });
+
+                let all = document.querySelectorAll("*");
+                for (let i = 0; i < all.length; i++) {
+                    if (document.querySelector("#commentsmodal").contains(all[i])) {
+                        all[i].setAttribute('tabindex', '999');
+                    }
+                }
             }
         });
-        
 
-        targetPost.comments.forEach((comment)=> {
+
+        targetPost.comments.forEach((comment) => {
 
         });
     }
-    if(ev.target.id === 'closemodal'){
+    if (ev.target.id === 'closemodal') {
         document.querySelector("#commentsmodal").style = 'display: none';
         document.querySelector("#modalbackdrop").style = 'display: none';
     }
@@ -46,12 +90,12 @@ const showStories = async (token) => {
         }
     })
     const data = await response.json();
-    
+
 
     data.forEach(story => {
         document.querySelector("#stories").innerHTML += `
         <div style="width: fit-content; text-align: center;" id="story">
-        <img style="width: 50px; height: 50px; border-radius: 50%;" src="${story.user.image_url}" />
+        <img style="border-radius: 50%; width: 50px; height: 50px; border-radius: 50%;" src="${story.user.image_url}" />
         <p>${story.user.username}</p>
       </div>
         `;
@@ -67,7 +111,7 @@ const showProfile = async (token) => {
         }
     })
     const data = await response.json();
-    
+
     document.querySelector("#bannername").innerHTML = data.username;
     document.querySelector("#avi").src = data.image_url;
     document.querySelector("#username").innerHTML = `<p style="margin-right: 10px;"><b>${data.username}</b></p>`;
@@ -82,7 +126,7 @@ const showSuggestions = async (token) => {
         }
     })
     const data = await response.json();
-    
+
     data.forEach(suggie => {
         document.querySelector("#suggies").innerHTML += `
         <div>
@@ -107,7 +151,7 @@ const showPosts = async (token) => {
     })
     const data = await response.json();
 
-    
+
     data.forEach(post => {
 
         let comments = ``;
