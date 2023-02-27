@@ -1,14 +1,36 @@
 import {getAccessToken} from './utilities.js';
 const rootURL = 'https://photo-app-secured.herokuapp.com';
 
+let token = undefined;
 
-window.addEventListener("click", (ev) => {
+window.addEventListener("click", async (ev) => {
     console.log(ev.target);
     if(ev.target.innerHTML.includes('Show') && ev.target.className === 'linkbutton'){
         document.querySelector("#commentsmodal").style = 'display: show';
         document.querySelector("#modalbackdrop").style = 'display: show';
-    }
 
+        const endpoint = `${rootURL}/api/posts`;
+        const response = await fetch(endpoint, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        const data = await response.json();
+        let targetPost = null;
+        data.forEach((post)=> {
+            if(post.id == Number(ev.target.getAttribute("data-postid"))){
+                targetPost = post;
+                document.querySelector("#commentsmodal").innerHTML += `<img style='width: 70%; height: 100%;' src='${post.image_url}' />`;
+                document.querySelector("#commentsmodal").innerHTML += `<p style='position: absolute; left: 71%; top: 1%;'>${post.user.username}</p>`;
+            }
+        });
+        
+
+        targetPost.comments.forEach((comment)=> {
+
+        });
+    }
     if(ev.target.id === 'closemodal'){
         document.querySelector("#commentsmodal").style = 'display: none';
         document.querySelector("#modalbackdrop").style = 'display: none';
@@ -90,16 +112,12 @@ const showPosts = async (token) => {
 
         let comments = ``;
 
-        post.comments.forEach(comment => {
-            
-        });
-
         document.querySelector("#feed").innerHTML += `    <div class="card">
         <span style="box-shadow: -1px -1px 3px 3px lightgray; display: flex; flex-direction: row;">
           <h4>${post.user.username}</h4>
           <h4 style="display: flex; margin-left: auto; margin-right: 10px;">...</h4>
         </span>
-        <img style="width: 100%; height: 50vh" src="${post.user.image_url}" />
+        <img style="width: 100%; height: 50vh" src="${post.image_url}" />
         <span style="display: flex; flex-direction: row;">
           <a class="nostylelink" href=""><i style="padding: 10px; font-size: 24px;" class="fa-regular fa-heart"></i></a>
           <a class="nostylelink" href=""><i style="padding: 10px; font-size: 24px;" class="fa-regular fa-comment"></i></a>
@@ -139,7 +157,7 @@ const initPage = async () => {
     document.querySelector("#commentsmodal").style.display = "none";
     document.querySelector("#modalbackdrop").style.display = "none";
     // first log in (we will build on this after Spring Break):
-    const token = await getAccessToken(rootURL, 'webdev', 'password');
+    token = await getAccessToken(rootURL, 'webdev', 'password');
 
     // then use the access token provided to access data on the user's behalf
     showStories(token);
