@@ -1,3 +1,12 @@
+button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+
 h3 {
   font-family: 'Comfortaa';
 }
@@ -60,6 +69,8 @@ body {
 }
 
 #stories {
+  white-space: nowrap;
+  overflow: hidden;
   background-color: #fdfafc;
   display: flex;
   flex-direction: row;
