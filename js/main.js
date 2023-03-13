@@ -50,6 +50,7 @@ window.addEventListener("click", async (ev) => {
         if (ev.target.className === 'fa-regular fa-bookmark') {
             createBookmark(ev.target.id.split('_')[1]).then((data) => {
                 ev.target.className = 'fa-solid fa-bookmark';
+                ev.target.setAttribute("aria-checked", "true");
             });
 
             let posts = await getPosts(token);
@@ -61,6 +62,7 @@ window.addEventListener("click", async (ev) => {
         } else {
             deleteBookmark(ev.target.getAttribute("data-bookmarkid")).then((data) => {
                 ev.target.className = 'fa-regular fa-bookmark';
+                ev.target.setAttribute("aria-checked", "false");
             });
         }
     }
@@ -69,6 +71,7 @@ window.addEventListener("click", async (ev) => {
         if (ev.target.className === 'fa-regular fa-heart') {
             createLike(ev.target.id.split('_')[1]).then((data) => {
                 ev.target.className = 'fa-solid fa-heart';
+                ev.target.setAttribute("aria-checked", "true");
                 let likes = document.querySelector(`#likes_${ev.target.id.split('_')[1]}`).innerHTML;
                 likes = likes.replace("<b>", "");
                 likes = likes.replace("</b>", "");
@@ -87,6 +90,7 @@ window.addEventListener("click", async (ev) => {
         } else {
             deleteLike(ev.target.getAttribute('data-likeid')).then((data) => {
                 ev.target.className = 'fa-regular fa-heart';
+                ev.target.setAttribute("aria-checked", "false");
                 let likes = document.querySelector(`#likes_${ev.target.id.split('_')[1]}`).innerHTML;
                 likes = likes.replace("<b>", "");
                 likes = likes.replace("</b>", "");
@@ -391,12 +395,12 @@ const showPosts = async (token) => {
         </span>
         <img style="width: 100%; height: 50vh" src="${post.image_url}" />
         <span style="display: flex; flex-direction: row;">
-          <a class="nostylelink" href="javascript: 1"><i data-likeid=${post.current_user_like_id} id="like_${post.id}" style="padding: 10px; font-size: 24px;" class="${post.current_user_like_id !== undefined ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i></a>
+          <a class="nostylelink" href="javascript: 1"><i aria-label="like" aria-checked="${post.current_user_like_id !== undefined ? "true" : "false" }" data-likeid=${post.current_user_like_id} id="like_${post.id}" style="padding: 10px; font-size: 24px;" class="${post.current_user_like_id !== undefined ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i></a>
           <a class="nostylelink" href=""><i style="padding: 10px; font-size: 24px;" class="fa-regular fa-comment"></i></a>
           <a class="nostylelink" href=""><i style="padding: 10px; font-size: 24px;"
               class="fa-regular fa-paper-plane"></i></a>
           <p style="display: flex; margin-left: auto;"><a href="javascript: 1" class="nostylelink"><i
-                data-bookmarkid=${post.current_user_bookmark_id} id="bookmark_${post.id}" style="padding: 10px; font-size: 24px; " class="${post.current_user_bookmark_id !== undefined ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'}"></i></a></p>
+                data-bookmarkid=${post.current_user_bookmark_id} aria-label="bookmark" aria-checked="${post.current_user_bookmark_id !== undefined ? "true" : "false"}" id="bookmark_${post.id}" style="padding: 10px; font-size: 24px; " class="${post.current_user_bookmark_id !== undefined ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'}"></i></a></p>
         </span>
         <div style="margin-left: 12px;">
           <p id="likes_${post.id}" style="margin-top: -20px;"><b>${post.likes.length} likes</b></p>
